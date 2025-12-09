@@ -1,0 +1,9 @@
+var recaptchaID = "recaptchaForm-" + formID;
+
+var onloadCallback = function () {
+    grecaptcha.render(recaptchaID, {
+        "sitekey": "6LdR0xgUAAAAAJka73YSV6hmJf_pXQvS1V-BNoBj",
+        "callback": recaptchaCallback,
+        "theme": "light"
+    });
+};
