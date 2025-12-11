@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cullen International Navigation</title>
+    <style>
+        /* Reset for navigation */
+        .cullen-nav * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Header Styles */
+        .cullen-nav header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .cullen-nav .header {
+            width: 100%;
+        }
+
+        .cullen-nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .cullen-nav .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .cullen-nav .col-logo {
+            flex: 0 0 auto;
+        }
+
+        .cullen-nav .logo {
+            display: block;
+            width: 200px;
+            height: 55px;
+            background: url('download (1).jpg') no-repeat center;
+            background-size: contain;
+            text-indent: -9999px;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        /* Fallback for logo if image doesn't load - reduced to show nothing */
+        .cullen-nav .logo::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            text-indent: 0;
+            font-size: 0;
+        }
+
+        .cullen-nav .col-nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        /* Navigation Menu */
+        .cullen-nav nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .cullen-nav nav > ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .cullen-nav nav > ul > li {
+            position: relative;
+        }
+
+        .cullen-nav nav a {
+            text-decoration: none;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+            padding: 10px 0;
+            display: block;
+        }
+
+        .cullen-nav nav a:hover {
+            color: #0099A1;
+        }
+
+        /* Dropdown Submenu */
+        .cullen-nav .w-sub {
+            position: relative;
+        }
+
+        .cullen-nav .subnav {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            list-style: none;
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            padding: 15px 0;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .cullen-nav .w-sub:hover .subnav {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .cullen-nav .subnav li {
+            padding: 0;
+        }
+
+        .cullen-nav .subnav a {
+            padding: 12px 25px;
+            font-size: 14px;
+            text-transform: none;
+            font-weight: 500;
+            display: block;
+        }
+
+        .cullen-nav .subnav a:hover {
+            background: #f5f5f5;
+            color: #0099A1;
+        }
+
+        /* Social Icons */
+        .cullen-nav .social {
+            display: flex;
+            gap: 15px;
+            margin-left: 20px;
+        }
+
+        .cullen-nav .social a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            transition: transform 0.3s;
+        }
+
+        .cullen-nav .social a:hover {
+            transform: scale(1.1);
+        }
+
+        .cullen-nav .social svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Actions */
+        .cullen-nav .actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cullen-nav .login {
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .cullen-nav .login:hover {
+            color: #0099A1;
+        }
+
+        .cullen-nav .btn {
+            padding: 10px 20px;
+            background: #0099A1;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cullen-nav .btn:hover {
+            background: #007a81;
+        }
+
+        /* Mobile Menu Button */
+        .cullen-nav .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .cullen-nav .burger span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            transition: all 0.3s;
+            border-radius: 2px;
+        }
+
+        .cullen-nav .burger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .cullen-nav .burger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .cullen-nav .burger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Mobile Navigation */
+        .cullen-nav .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 998;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cullen-nav .overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        .cullen-nav .secondary-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: #fff;
+            z-index: 999;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+            padding: 80px 0 30px;
+        }
+
+        .cullen-nav .secondary-nav.open {
+            right: 0;
+        }
+
+        .cullen-nav .cross {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+        }
+
+        .cullen-nav .cross span {
+            position: absolute;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            top: 50%;
+            left: 50%;
+        }
+
+        .cullen-nav .cross span:nth-child(1) {
+            transform: translate(-50%, -50%) rotate(45deg);
+        }
+
+        .cullen-nav .cross span:nth-child(2) {
+            transform: translate(-50%, -50%) rotate(-45deg);
+        }
+
+        .cullen-nav .secondary-nav .social {
+            justify-content: center;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .cullen-nav .secondary-nav ul {
+            list-style: none;
+            padding: 0 20px;
+        }
+
+        .cullen-nav .secondary-nav > div > ul > li {
+            border-bottom: 1px solid #eee;
+        }
+
+        .cullen-nav .secondary-nav a {
+            display: block;
+            padding: 15px 0;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .cullen-nav .secondary-nav .w-sub > ul {
+            padding-left: 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .cullen-nav .secondary-nav .w-sub.expanded > ul {
+            max-height: 500px;
+        }
+
+        .cullen-nav .secondary-nav .w-sub > a::after {
+            content: '+';
+            float: right;
+            font-size: 20px;
+            transition: transform 0.3s;
+        }
+
+        .cullen-nav .secondary-nav .w-sub.expanded > a::after {
+            transform: rotate(45deg);
+        }
+
+        .cullen-nav .secondary-nav .w-sub ul a {
+            text-transform: none;
+            font-weight: 500;
+            font-size: 13px;
+            padding: 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cullen-nav nav,
+            .cullen-nav .social,
+            .cullen-nav .login {
+                display: none;
+            }
+
+            .cullen-nav .burger {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cullen-nav .logo {
+                width: 150px;
+                height: 30px;
+            }
+
+            .cullen-nav .secondary-nav {
+                width: 280px;
+            }
+        }
+
+        /* Utility Classes */
+        .cullen-nav .txt-upcse {
+            text-transform: uppercase;
+        }
+
+        .cullen-nav .lat-bld {
+            font-weight: 600;
+        }
+
+        .cullen-nav .ft-med {
+            font-weight: 500;
+        }
+
+        .cullen-nav .primary {
+            color: #0099A1;
+        }
+    </style>
+</head>
+<body>
+    <div class="cullen-nav">
+        <header>
+            <div class="header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-logo">
+                            <a href="/" class="logo">Cullen International</a>
+                        </div>
+                        <div class="col-nav">
+                            <nav>
+                                <ul>
+                                    <li class="main">
+                                        <a href="/whyus.html" class="lat-bld txt-upcse">Why Us</a>
+                                    </li>
+                                    <li class="main w-sub">
+                                        <a href="#" class="lat-bld txt-upcse primary">Our Services</a>
+                                        <ul class="subnav">
+                                            <li><a href="/subscription.html" class="ft-med">Subscription Service</a></li>
+                                            <li><a href="/studies.html" class="ft-med">Custom Research & Studies</a></li>
+                                            <li><a href="/training.html" class="ft-med">Training</a></li>
+                                            <li><a href="/conferences.html" class="ft-med">Conferences & Seminars</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="main w-sub">
+                                        <a href="#" class="lat-bld txt-upcse primary">Our Expertise</a>
+                                        <ul class="subnav">
+                                            <li><a href="/globaltrends.html" class="ft-med">Global Trends</a></li>
+                                            <li><a href="/telecoms.html" class="ft-med">Telecoms</a></li>
+                                            <li><a href="/radiospectrum.html" class="ft-med">Radio Spectrum</a></li>
+                                            <li><a href="/media.html" class="ft-med">Media</a></li>
+                                            <li><a href="/digitaleconomy.html" class="ft-med">Digital Economy</a></li>
+                                            <li><a href="/postal.html" class="ft-med">Postal</a></li>
+                                            <li><a href="/competition.html" class="ft-med">Competition</a></li>
+                                            <li><a href="/sustainability.html" class="ft-med">Sustainability</a></li>
+                                            <li><a href="/iot-regulation.html" class="ft-med">Internet of Things</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="main w-sub">
+                                        <a href="/news.html" class="lat-bld txt-upcse primary">News</a>
+                                        <ul class="subnav">
+                                            <li><a href="/news.html#corporate" class="ft-med">Corporate</a></li>
+                                            <li><a href="/news.html#regulatory" class="ft-med">Regulatory</a></li>
+                                            <li><a href="/news.html#weeklyHighlights" class="ft-med">Newsletter</a></li>
+                                            <li><a href="/news.html#pressRelease" class="ft-med">Press Releases</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="main">
+                                        <a href="/events.html" class="lat-bld txt-upcse primary">Events</a>
+                                    </li>
+                                    <li class="main w-sub">
+                                        <a href="#" class="lat-bld txt-upcse primary">About</a>
+                                        <ul class="subnav">
+                                            <li><a href="/history.html" class="ft-med">Our History</a></li>
+                                            <li><a href="/ourteam.html" class="ft-med">Our Team</a></li>
+                                            <li><a href="/careers.html" class="ft-med">Careers</a></li>
+                                            <li><a href="/contact.html" class="ft-med">Contact</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <div class="social">
+                                    <a href="https://twitter.com/CullenInt" target="_blank" class="twitter">
+                                        <svg viewBox="0 0 99.213 99.213">
+                                            <polygon style="fill: #0099a1;" points="59.6,43.2 96.8,4 87.3,4 55,37.5 29.7,4 -0.4,4 38.9,54.8 0.6,95.1 9.4,95.1 43.5,60.5 70,95.1 100,95.1"/>
+                                        </svg>
+                                    </a>
+                                    <a href="https://www.linkedin.com/company/cullen-international/" target="_blank" class="linkedin">
+                                        <svg viewBox="0 0 99.213 99.213">
+                                            <g>
+                                                <path fill="#0099A1" d="M26.393,90.249V35.403H8.164v54.846H26.393L26.393,90.249z M17.279,27.918c6.355,0,10.312-4.215,10.312-9.478c-0.118-5.38-3.957-9.477-10.192-9.477c-6.236,0-10.312,4.097-10.312,9.477 c0,5.263,3.956,9.478,10.073,9.478H17.279L17.279,27.918z"/>
+                                                <path fill="#0099A1" d="M36.48,90.249H54.71V59.621c0-1.639,0.119-3.277,0.601-4.447 c1.317-3.276,4.317-6.669,9.353-6.669c6.598,0,9.235,5.032,9.235,12.403v29.341h18.228V58.802c0-16.846-8.992-24.686-20.987-24.686 c-9.834,0-14.151,5.498-16.549,9.242h0.12v-7.955H36.48C36.72,40.549,36.48,90.249,36.48,90.249L36.48,90.249z"/>
+                                            </g>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </nav>
+                            <div class="actions">
+                                <a href="/client/site" class="lat-bld txt-upcse login">My Cullen</a>
+                                <a href="/demo.html" class="btn green">Get a demo</a>
+                                <button class="burger" onclick="toggleMobileMenu()">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Overlay -->
+            <div class="overlay" onclick="closeMobileMenu()"></div>
+
+            <!-- Mobile Navigation Menu -->
+            <div class="secondary-nav">
+                <div class="social">
+                    <a href="https://twitter.com/CullenInt" target="_blank" class="twitter">
+                        <svg viewBox="0 0 99.213 99.213">
+                            <polygon style="fill: #0099a1;" points="59.6,43.2 96.8,4 87.3,4 55,37.5 29.7,4 -0.4,4 38.9,54.8 0.6,95.1 9.4,95.1 43.5,60.5 70,95.1 100,95.1"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/company/cullen-international/" target="_blank" class="linkedin">
+                        <svg viewBox="0 0 99.213 99.213">
+                            <g>
+                                <path fill="#0099A1" d="M26.393,90.249V35.403H8.164v54.846H26.393L26.393,90.249z M17.279,27.918c6.355,0,10.312-4.215,10.312-9.478c-0.118-5.38-3.957-9.477-10.192-9.477c-6.236,0-10.312,4.097-10.312,9.477 c0,5.263,3.956,9.478,10.073,9.478H17.279L17.279,27.918z"/>
+                                <path fill="#0099A1" d="M36.48,90.249H54.71V59.621c0-1.639,0.119-3.277,0.601-4.447 c1.317-3.276,4.317-6.669,9.353-6.669c6.598,0,9.235,5.032,9.235,12.403v29.341h18.228V58.802c0-16.846-8.992-24.686-20.987-24.686 c-9.834,0-14.151,5.498-16.549,9.242h0.12v-7.955H36.48C36.72,40.549,36.48,90.249,36.48,90.249L36.48,90.249z"/>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+                <button class="cross" onclick="closeMobileMenu()">
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="container">
+                    <ul>
+                        <li><a href="/client/site" class="lat-bld txt-upcse">Login</a></li>
+                        <li><a href="/whyus.html" class="lat-bld txt-upcse">Why us</a></li>
+                        <li class="w-sub">
+                            <a href="#" class="lat-bld txt-upcse" onclick="toggleSubmenu(event)">Our services</a>
+                            <ul>
+                                <li><a href="/subscription.html" class="ft-med">Annual Subscription Service</a></li>
+                                <li><a href="/studies.html" class="ft-med">Custom Research & Studies</a></li>
+                                <li><a href="/training.html" class="ft-med">Training</a></li>
+                                <li><a href="/conferences.html" class="ft-med">Conferences & Seminars</a></li>
+                            </ul>
+                        </li>
+                        <li class="w-sub">
+                            <a href="#" class="lat-bld txt-upcse" onclick="toggleSubmenu(event)">Our expertise</a>
+                            <ul>
+                                <li><a href="/globaltrends.html" class="ft-med">Global Trends</a></li>
+                                <li><a href="/telecoms.html" class="ft-med">Telecoms</a></li>
+                                <li><a href="/radiospectrum.html" class="ft-med">Radio Spectrum</a></li>
+                                <li><a href="/media.html" class="ft-med">Media</a></li>
+                                <li><a href="/digitaleconomy.html" class="ft-med">Digital economy</a></li>
+                                <li><a href="/postal.html" class="ft-med">Postal</a></li>
+                                <li><a href="/competition.html" class="ft-med">Competition</a></li>
+                                <li><a href="/sustainability.html" class="ft-med">Sustainability</a></li>
+                                <li><a href="/iot-regulation.html" class="ft-med">Internet of Things</a></li>
+                            </ul>
+                        </li>
+                        <li class="w-sub">
+                            <a href="/news.html" class="lat-bld txt-upcse" onclick="toggleSubmenu(event)">News</a>
+                            <ul>
+                                <li><a href="/news.html#corporate" class="ft-med">Corporate</a></li>
+                                <li><a href="/news.html#regulatory" class="ft-med">Regulatory</a></li>
+                                <li><a href="/news.html#weeklyHighlights" class="ft-med">Newsletter</a></li>
+                                <li><a href="/news.html#pressRelease" class="ft-med">Press Releases</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/events.html" class="lat-bld txt-upcse">Events</a></li>
+                        <li class="w-sub">
+                            <a href="#" class="lat-bld txt-upcse" onclick="toggleSubmenu(event)">About</a>
+                            <ul>
+                                <li><a href="/history.html" class="ft-med">Our History</a></li>
+                                <li><a href="/ourteam.html" class="ft-med">Our Team</a></li>
+                                <li><a href="/careers.html" class="ft-med">Careers</a></li>
+                                <li><a href="/contact.html" class="ft-med">Contact</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const burger = document.querySelector('.cullen-nav .burger');
+            const overlay = document.querySelector('.cullen-nav .overlay');
+            const mobileNav = document.querySelector('.cullen-nav .secondary-nav');
+            const body = document.body;
+
+            burger.classList.toggle('open');
+            overlay.classList.toggle('show');
+            mobileNav.classList.toggle('open');
+            body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            const burger = document.querySelector('.cullen-nav .burger');
+            const overlay = document.querySelector('.cullen-nav .overlay');
+            const mobileNav = document.querySelector('.cullen-nav .secondary-nav');
+            const body = document.body;
+
+            burger.classList.remove('open');
+            overlay.classList.remove('show');
+            mobileNav.classList.remove('open');
+            body.style.overflow = '';
+        }
+
+        function toggleSubmenu(event) {
+            event.preventDefault();
+            const parent = event.target.closest('.w-sub');
+            
+            // Close other open submenus
+            document.querySelectorAll('.cullen-nav .secondary-nav .w-sub').forEach(item => {
+                if (item !== parent) {
+                    item.classList.remove('expanded');
+                }
+            });
+            
+            // Toggle current submenu
+            parent.classList.toggle('expanded');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('.cullen-nav');
+            const burger = document.querySelector('.cullen-nav .burger');
+            const mobileNav = document.querySelector('.cullen-nav .secondary-nav');
+            
+            if (!nav.contains(event.target) && mobileNav.classList.contains('open')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close mobile menu on window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 1024) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+</html>
